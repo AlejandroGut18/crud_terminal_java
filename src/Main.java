@@ -40,7 +40,7 @@ public class Main {
                     clear();
                     break;
                 case 5:
-                    String cedula = leerCadena("Ingrese la cédula del estudiante: ");
+                    String cedula = leerNumStrings("Ingrese la cédula del estudiante: ");
                     buscar(cedula);
                     clear();
                     break;
@@ -75,18 +75,13 @@ public class Main {
     public static void actualizar() {
         Scanner scanner = new Scanner(System.in);
         String cedula = leerCadena("Ingrese cedula del estudiante: ");
-
+        leer();
         Estudiante estudiante = null;
         for (Estudiante est : listaEstudiantes) {
             if (est.getCedula().equals(cedula)) {
                 estudiante = est;
                 break;
             }
-        }
-        if (estudiante == null) {
-            System.out.println("Estudiante no encontrado.");
-            pausar();
-            return;
         }
 
         String nuevoNombre = leerCadena("Ingrese el nuevo nombre (actual: " + estudiante.getNombre() + "):");
@@ -109,11 +104,12 @@ public class Main {
     public static void eliminar() {
         if (listaEstudiantes.isEmpty()){
             System.out.println("No hay Estudiantes");
+            pausar();
             return;
         }
         System.out.println("Lista de estudiantes: ");
         leer();
-        String cedula = leerCadena("Ingrese la cédula del estudiante a eliminar: ");
+        String cedula = leerNumStrings("Ingrese la cédula del estudiante a eliminar: ");
         for (int i = 0; i < listaEstudiantes.size(); i++) {
             if (listaEstudiantes.get(i).getCedula().equals(cedula)) {
                 listaEstudiantes.remove(i);
@@ -127,6 +123,7 @@ public class Main {
     }
 
     public  static void leer(){
+        clear();
         if (listaEstudiantes.isEmpty()){
             System.out.println("No hay Estudiantes");
             pausar();
@@ -142,7 +139,7 @@ public class Main {
         System.out.println("Ingresa los datos del estudiante: ");
         String nombre = leerCadena("Nombre: ");
         String apellido = leerCadena("Apellido: ");
-        String cedula = leerCadena("Cedula: ");
+        String cedula = leerNumStrings("Cedula: ");
         String sexo = leerCadena("Sexo: ");
         float peso = leerFloat("Peso: ");
         float estatura = leerFloat("Estatura: ");
@@ -152,6 +149,7 @@ public class Main {
             if (nota >=0 & nota <=20){
                 break;
             }
+            System.out.print("La nota no puede ser menor a 0 o mayor 20: ");
         }
         Estudiante estudiante = new Estudiante(nombre,apellido,cedula,sexo,peso,estatura,nota);
         listaEstudiantes.add(estudiante);
@@ -162,8 +160,18 @@ public class Main {
     public static float leerFloat(String message) {
         Scanner scanner = new Scanner(System.in);
         System.out.print(message);
-        String input = scanner.nextLine();
-        float numero = Float.parseFloat(input);
+        float numero;
+        while (true){
+            try {
+                numero = ValidadorEntrada.validarFloat(scanner.nextLine());
+                break;
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            } catch (Exception e){
+                System.out.println("Error no controlado");
+                System.out.println(e.getMessage());
+            }
+        }
         return numero;
     }
 
@@ -173,7 +181,23 @@ public class Main {
         while (cadena == null){
             System.out.print(message);
             try {
-                cadena = ValidadorEntrada.validarLetrasYNumeros(scanner.nextLine());
+                cadena = ValidadorEntrada.validarLetras(scanner.nextLine());
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            } catch (Exception e){
+                System.out.println("Error no controlado");
+                System.out.println(e.getMessage());
+            }
+        }
+        return cadena;
+    }
+    public static String leerNumStrings(String message) {
+        Scanner scanner = new Scanner(System.in);
+        String cadena = null;
+        while (cadena == null){
+            System.out.print(message);
+            try {
+                cadena = ValidadorEntrada.validarLetrasYCedula(scanner.nextLine());
             } catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
             } catch (Exception e){

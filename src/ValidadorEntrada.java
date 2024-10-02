@@ -5,7 +5,6 @@ public class ValidadorEntrada {
             throw new IllegalArgumentException("Debe contener sólo letras 😘👌");
 
         }
-
         return str;
     }
 
@@ -30,18 +29,19 @@ public class ValidadorEntrada {
         return option;
     }
 
-    public static String validarLetrasYNumeros(String str) throws IllegalArgumentException {
-        if (!str.matches("[a-zA-Z0-9]+")) {
-            throw new IllegalArgumentException("Debe contener sólo letras y números 😘👌");
+    public static String validarLetrasYCedula(String str) throws IllegalArgumentException {
+        if (!str.matches("[0-9]+")) {
+            throw new IllegalArgumentException("Debe contener sólo número de cedula 😘👌");
         }
         return str;
     }
 
-    /*public static float validarFloat(float n) throws IllegalArgumentException{
+    public static float validarFloat(String str) throws IllegalArgumentException {
+        try {
+            return Float.parseFloat(str);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Debe ser un número flotante válido 😜👌");
+        }
+    }
 
-
-        throw new IllegalArgumentException("Nota invalida. Rango: 1 - 20. 😉😉😉");
-
-        return nota;
-    }*/
 }
